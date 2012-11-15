@@ -4,3 +4,4 @@ obj
 *.DS_Store
 # mstest test results
 TestResults
+*.userprefs

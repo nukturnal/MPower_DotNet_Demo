@@ -34,11 +34,11 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="MPowerPayments">
-      <HintPath>bin\Debug\MPowerPayments.dll</HintPath>
-    </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>bin\Debug\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="MPowerPayments">
+      <HintPath>..\..\..\apis_4_mpower\mpower_dotnet\MPowerPayments\MPowerPayments\bin\Debug\MPowerPayments.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

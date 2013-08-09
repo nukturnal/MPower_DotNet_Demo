@@ -34,35 +34,84 @@ namespace MPowerTest
 //				ReturnUrl = "http://www.returnurl.com/"
 			};
 
-			MPowerOnsiteInvoice invoice = new MPowerOnsiteInvoice (setup, store);
-			if (invoice.Charge ("OPR-cd28584202305f04", "XYDQLZ")) {
-				Console.WriteLine(invoice.Status);
-				Console.WriteLine(invoice.ResponseText);
-				Console.WriteLine(invoice.GetReceiptUrl());
+			MPowerDirectCard card = new MPowerDirectCard (setup);
+			if (card.Charge (20.0, "Alfred R. Rowe", "378282246310005", "123", "06", "2014")) {
+				Console.WriteLine (card.ResponseText);
 			} else {
-				Console.WriteLine(invoice.Status);
-				Console.WriteLine(invoice.ResponseText);
+				Console.WriteLine (card.ResponseText);
 			}
 
-//			invoice.AddItem ("A Big Bag of Rice", 2, 20.99, 41.89,"Salutana premium size bag of rice");
-//			invoice.AddItem ("Huge Bag of Chocolates", 2, 20.99, 41.89,"Golden tree TRX-100 Agentina");
-//			invoice.AddItem ("Pair of trousers", 2, 20.99, 41.89);
-//
-//			invoice.SetTotalAmount (100.50);
-//			invoice.SetCustomData("Name","Alfred Rowe");
-//			invoice.AddTax("VAT (5%)",30);
-//			invoice.AddTax("NHIL (15%)",30);
-//
-//			if (invoice.Create("0244124660")) {
-//				Console.WriteLine (invoice.Token);
-//				Console.WriteLine (invoice.InvoiceToken);
-//				Console.WriteLine (invoice.Status);
-//				Console.WriteLine (invoice.ResponseText);
-//				Console.WriteLine (invoice.GetInvoiceUrl());
-//			} else {
-//				Console.WriteLine (invoice.ResponseText);
-//				Console.WriteLine (invoice.Status);
-//			}
+//			Performing an MPower Checkout Request
+			MPowerCheckoutInvoice checkout_invoice = new MPowerCheckoutInvoice (setup, store);
+			checkout_invoice.AddItem ("A Big Bag of Rice", 2, 20.99, 41.89,"Salutana premium size bag of rice");
+			checkout_invoice.AddItem ("Huge Bag of Chocolates", 2, 20.99, 41.89,"Golden tree TRX-100 Agentina");
+			checkout_invoice.AddItem ("Pair of trousers", 2, 20.99, 41.89);
+			
+			checkout_invoice.SetTotalAmount (100.50);
+			checkout_invoice.SetCustomData("Name","Alfred Rowe");
+			checkout_invoice.AddTax("VAT (5%)",30);
+			checkout_invoice.AddTax("NHIL (15%)",30);
+
+			Console.WriteLine("MPower Checkout Request Test");
+
+			if (checkout_invoice.Create()) {
+				Console.WriteLine (checkout_invoice.Token);
+				Console.WriteLine (checkout_invoice.Status);
+				Console.WriteLine (checkout_invoice.ResponseText);
+				Console.WriteLine (checkout_invoice.GetInvoiceUrl());
+			} else {
+				Console.WriteLine (checkout_invoice.ResponseText);
+				Console.WriteLine (checkout_invoice.Status);
+			}
+
+
+//			Performing an MPower OPR Request & Charge
+
+			MPowerOnsiteInvoice opr_invoice = new MPowerOnsiteInvoice (setup, store);
+			opr_invoice.AddItem ("A Big Bag of Rice", 2, 20.99, 41.89,"Salutana premium size bag of rice");
+			opr_invoice.AddItem ("Huge Bag of Chocolates", 2, 20.99, 41.89,"Golden tree TRX-100 Agentina");
+			opr_invoice.AddItem ("Pair of trousers", 2, 20.99, 41.89);
+			
+			opr_invoice.SetTotalAmount (100.50);
+			opr_invoice.SetCustomData("Name","Alfred Rowe");
+			opr_invoice.AddTax("VAT (5%)",30);
+			opr_invoice.AddTax("NHIL (15%)",30);
+
+//			The Request
+			Console.WriteLine("MPower OPR Request Test");
+
+			if (opr_invoice.Create("MPOWER_CUSTOMER_USERNAME_OR_PHONENO")) {
+				Console.WriteLine (opr_invoice.Token);
+				Console.WriteLine (opr_invoice.Status);
+				Console.WriteLine (opr_invoice.ResponseText);
+			} else {
+				Console.WriteLine (opr_invoice.ResponseText);
+				Console.WriteLine (opr_invoice.Status);
+			}
+
+//			The Charge
+			Console.WriteLine("MPower OPR Charge Test");
+			MPowerOnsiteInvoice opr_invoice2 = new MPowerOnsiteInvoice (setup, store);
+			if (opr_invoice2.Charge ("OPR-cd28584202305f04", "XYDQLZ")) {
+				Console.WriteLine (opr_invoice2.Status);
+				Console.WriteLine (opr_invoice2.ResponseText);
+				Console.WriteLine (opr_invoice2.GetReceiptUrl ());
+			} else {
+				Console.WriteLine (opr_invoice2.Status);
+				Console.WriteLine (opr_invoice2.ResponseText);
+			}
+
+//			Paying an MPower Account holder using MPowerDirectPay
+			Console.WriteLine("MPower DirectPay Test");
+			MPowerDirectPay direct_pay = new MPowerDirectPay (setup);
+			if(direct_pay.CreditAccount("MPOWER_CUSTOMER_USERNAME_OR_PHONENO",50)){
+				Console.WriteLine(direct_pay.Description);
+				Console.WriteLine (direct_pay.Status);
+				Console.WriteLine (direct_pay.ResponseText);
+			}else{
+				Console.WriteLine(direct_pay.ResponseText);
+				Console.WriteLine (direct_pay.Status);
+			}
 		}
 	}
 }
